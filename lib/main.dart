@@ -46,13 +46,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _subhanCounter = 0, _alhamedCounter = 0, _akkbarCounter = 0;
+  int _subhanCounter = 0, _alhamedCounter = 0, _akkbarCounter = 0, _mainCounter = 0;
+  String _titleText = "ابدأ الذكر";
+
   void _incrementCounter(int counterNumber) {
     setState(() {
       switch(counterNumber){
-        case 1: _subhanCounter++; break;
-        case 2: _alhamedCounter++; break;
-        case 3: _akkbarCounter++; break;
+        case 1: _subhanCounter++; _mainCounter = _subhanCounter; _titleText = "سبحان الله"; break;
+        case 2: _alhamedCounter++; _mainCounter = _alhamedCounter; _titleText = "الحمدلله"; break;
+        case 3: _akkbarCounter++;  _mainCounter = _akkbarCounter; _titleText = "الله أكبر";break;
 
       }
 
@@ -62,6 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void _earaseAllCounter(){
 
     setState(() {
+      _titleText = "ابدأ الذكر";
+      _mainCounter = 0;
       _subhanCounter = 0;
       _alhamedCounter = 0;
       _akkbarCounter = 0;
@@ -86,53 +90,89 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
 
           children: <Widget>[
-            const Text('سبحان الله', style: TextStyle(fontSize: 30)),
-            Text(
-              '$_subhanCounter',
-              style: TextStyle(fontSize: 25)
-            ),
-            ElevatedButton(
-              onPressed: (){
-                _incrementCounter(1);
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-              child: const Icon(Icons.add),
-            ),
-            SizedBox(height: 30,),
-            const Text('الحمد الله',
-            style: TextStyle(fontSize: 30),),
 
-            Text(
-              '$_alhamedCounter',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            ElevatedButton(
-              onPressed: (){
-                _incrementCounter(2);
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-              child: const Icon(Icons.add),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(_titleText, style: TextStyle(fontSize: 40),),
+
+              ],
             ),
             SizedBox(height: 30,),
-            const Text('الله أكبر',
-                style: TextStyle(fontSize: 30)),
-            Text(
-              '$_akkbarCounter',
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("$_mainCounter", style: TextStyle(fontSize: 30),)
+              ],
             ),
-            ElevatedButton(
-              onPressed:(){
-                _incrementCounter(3);
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-              child: const Icon(Icons.add),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-            SizedBox(height: 100,),
-            ElevatedButton(
-              onPressed: _earaseAllCounter,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Icon(Icons.delete),
+            SizedBox(height: 30,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: (){
+                        _incrementCounter(1);},
+                    child: Text("سبحان الله", style: TextStyle(fontSize: 20),),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.orange)
+                  ),
+                  SizedBox(width: 15,),
+                  ElevatedButton(
+                      onPressed: (){
+                        _incrementCounter(2);},
+                      child: Text("الحمد الله", style: TextStyle(fontSize: 20),),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.orange)
+                  ),
+                  SizedBox(width: 15,),
+                  ElevatedButton(
+                      onPressed: (){
+                        _incrementCounter(3);},
+                      child: Text("  الله أكبر", style: TextStyle(fontSize: 20),),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.orange)
+                  )
+                ],
             ),
+            SizedBox(height: 70,),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+
+              children: [
+
+              ElevatedButton(
+                onPressed: _earaseAllCounter,
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Icon(Icons.delete),
+              ),
+            ],),
+            SizedBox(height: 70,),
+            Column(
+
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("$_subhanCounter", style: TextStyle(fontSize: 25),),
+                    Text("  : سبحان الله", style: TextStyle(fontSize: 20),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("$_alhamedCounter", style: TextStyle(fontSize: 25),),
+                    Text("  :   الحمد الله", style: TextStyle(fontSize: 20),),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("$_akkbarCounter", style: TextStyle(fontSize: 25),),
+                    Text("  :     الله أكبر", style: TextStyle(fontSize: 20),),
+                  ],
+                )
+              ],
+            )
+            
+
           ],
         ),
       ),
