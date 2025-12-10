@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+
     );
   }
 }
@@ -47,7 +48,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _subhanCounter = 0, _alhamedCounter = 0, _akkbarCounter = 0, _mainCounter = 0;
-  String _titleText = "ابدأ الذكر";
+  String _titleText = "ابدأ الذكر"; // the main title
 
   void _incrementCounter(int counterNumber) {
     setState(() {
