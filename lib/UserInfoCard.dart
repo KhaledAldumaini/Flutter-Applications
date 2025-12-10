@@ -1,37 +1,52 @@
+//import 'dart:io';
+
 import 'package:flutter/material.dart';
 
+
 void main() {
-  runApp(MyLifecycleApp());
+  runApp(ProfileApp());
 }
 
-class MyLifecycleApp extends StatefulWidget {
+class ProfileApp extends StatefulWidget {
   @override
-  _MyLifecycleAppState createState() => _MyLifecycleAppState();
+  _ProfileAppState createState() => _ProfileAppState();
 }
 
-class _MyLifecycleAppState extends State<MyLifecycleApp> {
-  @override
-  void initState() {
-    super.initState();
-    print("initState called");
-  }
+class _ProfileAppState extends State<ProfileApp> {
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
-    print("dispose called");
+    // Step 4: Dispose of the controller when it’s no longer needed
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("build called");
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Stateful Widget Lifecycle'),
-        ),
-        body: Center(
-          child: Text('Check the console for lifecycle methods.'),
+        appBar: AppBar(title: Text('TextEditingController Example')),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                // Step 2: Assign the controller to the TextField
+                controller: _controller,
+                decoration: InputDecoration(labelText: 'Enter some text'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Step 3: Access the text value from the controller
+                  print('Text entered: ${_controller.text}');
+
+                },
+                child: Text('Print Text'),
+              ),
+            ],
+          ),
         ),
       ),
     );
