@@ -1,54 +1,39 @@
 import 'package:flutter/material.dart';
-import 'UserInfoCard.dart'; // assume it is in a separate file
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyLifecycleApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class MyLifecycleApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Custom Widget Demo',
-      home: const HomeScreen(),
-    );
+  _MyLifecycleAppState createState() => _MyLifecycleAppState();
+}
+
+class _MyLifecycleAppState extends State<MyLifecycleApp> {
+  @override
+  void initState() {
+    super.initState();
+    print("initState called");
   }
-}
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  @override
+  void dispose() {
+    print("dispose called");
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Students List')),
-      body: ListView(
-        children: const [
-          UserInfoCard(
-            name: 'Khaled Ali',
-            email: 'ali@example.com',
-            role: 'Student',
-          ),
-          UserInfoCard(
-            name: 'Sara Hassan',
-            email: 'sara@example.com',
-            role: 'Student',
-          ),
-          UserInfoCard(
-            name: 'Dr. khaled',
-            email: 'teacher@example.com',
-            role: 'Teacher',
-          ),
-          UserInfoCard(
-            name: 'Dr. Saeed',
-            email: 'teacher@example.com',
-            role: 'Teacher',
-          ),
-        ],
+    print("build called");
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Stateful Widget Lifecycle'),
+        ),
+        body: Center(
+          child: Text('Check the console for lifecycle methods.'),
+        ),
       ),
     );
   }
 }
-
