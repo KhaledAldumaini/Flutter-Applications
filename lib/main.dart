@@ -1,75 +1,88 @@
-//import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(ProfileApp());
+  runApp(SettingsPage());
 }
-
-class ProfileApp extends StatefulWidget {
+class SettingsPage extends StatefulWidget {
   @override
-  _ProfileAppState createState() => _ProfileAppState();
+  _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _ProfileAppState extends State<ProfileApp> {
+class _SettingsPageState extends State<SettingsPage> {
+  TextEditingController _usernameController = TextEditingController();
+  bool _darkModeEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  // Method to load saved settings
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _usernameController.text = prefs.getString('username') ?? '';
+      _darkModeEnabled = prefs.getBool('darkMode') ?? false;
+    });
+  }
+
+  // Method to save settings
+  Future<void> _saveSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', _usernameController.text);
+    await prefs.setBool('darkMode', _darkModeEnabled);
+    print('Settings saved');
+  }
+
+  // Method to Delete settings
+  Future<void> _clearSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('username'); // Remove username
+    await prefs.remove('darkMode'); // Remove dark mode preference
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('User Profile'),
-        ),
-        body: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20),
-              color: Colors.blueAccent,
-              child: Column(
+        appBar: AppBar(title: Text('Settings')),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(labelText: 'Username'),
+              ),
+              SwitchListTile(
+                title: Text('Dark Mode'),
+                value: _darkModeEnabled,
+                onChanged: (bool value) {
+                  setState(() {
+                    _darkModeEnabled = value;
+                  });
+                },
+              ),
+              Row(
                 children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage:Image.asset('pics/profilepic.png').image,
+                  ElevatedButton(
+                    onPressed: _saveSettings,
+                    child: Text('Save Settings'),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    'John Doe',
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
-                  Text(
-                    'Software Developer',
-                    style: TextStyle(fontSize: 16, color: Colors.white70),
+                  SizedBox(width: 20,),
+                  ElevatedButton(
+                    onPressed: _clearSettings,
+                    child: Text('clear setting'),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Email:'),
-                  Text('john.doe@example.com'),
-                ],
-              ),
-            ),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Phone:'),
-                  Text('+1234567890'),
-                ],
-              ),
-            ),
-          ],
+
+            ],
+          ),
         ),
       ),
-
     );
   }
 }
-
