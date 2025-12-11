@@ -1,49 +1,58 @@
-//import 'dart:io';
-
 import 'package:flutter/material.dart';
 
+import 'about_screen.dart';
 import 'first_screen.dart';
 
+
 void main() {
-  runApp(ProfileApp());
+  runApp(const MyApp());
 }
 
-class ProfileApp extends StatefulWidget {
-  @override
-  _ProfileAppState createState() => _ProfileAppState();
-}
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-
-class _ProfileAppState extends State<ProfileApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FirstScreen(),
+      title: 'Named Routes Demo',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/SecondPage': (context) => const SecondPage(),
+        '/about': (context) => const AboutScreen(),
+      },
     );
   }
 }
 
-class FirstScreen extends StatelessWidget {
-  TextEditingController Textcontroller=new TextEditingController();
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Main Screen')),
+      appBar: AppBar(title: const Text('Home')),
       body: Center(
         child: Column(
           children: [
-            TextField(
-              controller: Textcontroller,
+            ElevatedButton(
+              onPressed: () async{
+                final result = await Navigator.pushNamed(
+                    context,'/SecondPage'
+                )as bool?;
+                if (result != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(result?'You selected accept':'you selected not to accept')),
+                  );
+                }
+              },
+              child: const Text('Go to selection screen'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SecondPage()),
-                );
+                Navigator.pushNamed(context, '/about');
               },
-              child: Text('Go to Second Screen'),
+              child: const Text('Go to About'),
             ),
           ],
         ),
