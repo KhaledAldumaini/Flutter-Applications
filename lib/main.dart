@@ -1,54 +1,92 @@
+//import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'UserInfoCard.dart'; // assume it is in a separate file
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProfileApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ProfileApp extends StatefulWidget {
+  @override
+  _ProfileAppState createState() => _ProfileAppState();
+}
+
+class _ProfileAppState extends State<ProfileApp> {
+  final _formKey = GlobalKey<FormState>();
+  String _name = '';
+  String _email = '';
+  final TextEditingController _passwordController = TextEditingController();
+
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      print('Name: $_name, Email: $_email, Password : ${_passwordController.text}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Custom Widget Demo',
-      home: const HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Students List')),
-      body: ListView(
-        children: const [
-          UserInfoCard(
-            name: 'Khaled Ali',
-            email: 'ali@example.com',
-            role: 'Student',
+      home: Scaffold(
+        appBar: AppBar(title: Text('Form Example')),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _name = value!;
+                  },
+                ),
+                SizedBox(height: 16),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Email'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _email = value!;
+                  },
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(labelText: 'Password'),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters long';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _submitForm,
+                  child: Text('Submit'),
+                ),
+              ],
+            ),
           ),
-          UserInfoCard(
-            name: 'Sara Hassan',
-            email: 'sara@example.com',
-            role: 'Student',
-          ),
-          UserInfoCard(
-            name: 'Dr. khaled',
-            email: 'teacher@example.com',
-            role: 'Teacher',
-          ),
-          UserInfoCard(
-            name: 'Dr. Saeed',
-            email: 'teacher@example.com',
-            role: 'Teacher',
-          ),
-        ],
+        ),
       ),
     );
   }
 }
-
