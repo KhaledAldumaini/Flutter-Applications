@@ -1,61 +1,56 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'about_screen.dart';
-import 'first_screen.dart';
 
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Named Routes Demo',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/SecondPage': (context) => const SecondPage(),
-        '/about': (context) => const AboutScreen(),
-      },
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class _HomePageState extends State<HomePage> {
+  File? file;
+  FilePickerResult? result;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
+      appBar: AppBar(title: const Text('File Picker cc')),
       body: Center(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () async{
-                final result = await Navigator.pushNamed(
-                    context,'/SecondPage'
-                )as bool?;
-                if (result != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(result?'You selected accept':'you selected not to accept')),
-                  );
-                }
-              },
-              child: const Text('Go to selection screen'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/about');
-              },
-              child: const Text('Go to About'),
-            ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          if (file != null || result != null) ...[
+            if (kIsWeb) ...[
+              Image.memory(
+                result!.files.first.bytes!,
+                height: 350,
+                width: 350,
+                fit: BoxFit.fill,
+              ),
+            ] else ...[
+              Image.file(file!, height: 150, width: 150, fit: BoxFit.fill),
+            ],
+            const SizedBox(height: 8),
           ],
-        ),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                result = await FilePicker.platform.pickFiles();
+                if (result != null) {
+                  if (!kIsWeb) {
+                    file = File(result!.files.single.path!);
+                  }
+                  setState(() {});
+                } else {
+                  // User canceled the picker
+                }
+              } catch (_) {}
+            },
+            child: const Text('Pick File'),
+          ),
+        ]),
       ),
     );
   }
