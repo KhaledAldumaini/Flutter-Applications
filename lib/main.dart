@@ -1,62 +1,75 @@
+//import 'dart:io';
+
 import 'package:flutter/material.dart';
 
-import 'about_screen.dart';
-import 'first_screen.dart';
-
-
 void main() {
-  runApp(const MyApp());
+  runApp(ProfileApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ProfileApp extends StatefulWidget {
+  @override
+  _ProfileAppState createState() => _ProfileAppState();
+}
+
+class _ProfileAppState extends State<ProfileApp> {
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Named Routes Demo',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/SecondPage': (context) => const SecondPage(),
-        '/about': (context) => const AboutScreen(),
-      },
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: Center(
-        child: Column(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('User Profile'),
+        ),
+        body: Column(
           children: [
-            ElevatedButton(
-              onPressed: () async{
-                final result = await Navigator.pushNamed(
-                    context,'/SecondPage'
-                )as bool?;
-                if (result != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(result?'You selected accept':'you selected not to accept')),
-                  );
-                }
-              },
-              child: const Text('Go to selection screen'),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20),
+              color: Colors.blueAccent,
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage:Image.asset('pics/profilepic.png').image,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'John Doe',
+                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  ),
+                  Text(
+                    'Software Developer',
+                    style: TextStyle(fontSize: 16, color: Colors.white70),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/about');
-              },
-              child: const Text('Go to About'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Email:'),
+                  Text('john.doe@example.com'),
+                ],
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Phone:'),
+                  Text('+1234567890'),
+                ],
+              ),
             ),
           ],
         ),
       ),
+
     );
   }
 }
+
